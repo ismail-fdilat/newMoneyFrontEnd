@@ -1,22 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Row, Col, Progress, Card } from 'reactstrap'
-import StatsCard from '../customListCharts/StatsCard'
-import ApexDonutChart from '../customListCharts/ApexDonutChart'
+import StatsCard from './customListCharts/StatsCard'
+import ApexDonutCostChart from './customListCharts/ApexDonutCostChart'
+import ApexDonutSavingChart from './customListCharts/ApexDonutSavingChart'
 import '@styles/react/libs/charts/apex-charts.scss'
 import '@styles/base/pages/dashboard-ecommerce.scss'
-import ProgressBar from '../customListCharts/ProgressBar'
-import ApexScatterChart from '../customListCharts/ApexScatterCharts'
-import ApexLineChart from "../customListCharts/ApexLineChart"
-// ** Custom Hooks
-import { useRTL } from '@hooks/useRTL'
-import axios from 'axios'
-import headers from "./headers.json"
+import ProgressBar from './customListCharts/ProgressBar'
+import ApexScatterChart from './customListCharts/ApexScatterCharts'
+import ApexLineChart from "./customListCharts/ApexLineChart"
 
-const config = {
-  method: 'get',
-  url: `${process.env.REACT_APP_APIURL}/domain_volumes`,
-  headers
-}
 
 class ListDashboard extends React.Component {
   constructor(props) {
@@ -30,7 +22,6 @@ class ListDashboard extends React.Component {
 
   async componentDidMount() {
 
-
   }
 
   render() {
@@ -39,25 +30,27 @@ class ListDashboard extends React.Component {
       <div id='dashboard-list' className="pt-5 ">
         <Row className='match-height' >
           <Col lg='7' md='7' xs='12'>
-            <ApexLineChart direction='ltr' warning="#ff9d00" />
             <ApexScatterChart
               direction='ltr'
               primary="#6f61ee"
               success="#61ed7f"
               warning="#ff9d00"
+
             />
+            <ApexLineChart primary="#6f61ee" direction='ltr' warning="#ff9d00" />
+
           </Col>
           <Col lg='5' md='5' xs='12' id="progress-bar" className="pr-5">
 
             <h4>Remaining Emission Limit in the Cycle</h4>
-            <ProgressBar bgcolor="#61ed7f" progress='70' height={30} />
+            <ProgressBar height={30} />
 
             <div style={{ textAlign: 'right', paddingRight: 20 }}>
-              <small className='text-muted ' >90 days remaining</small></div>
+              <small className='text-muted' >90 days remaining</small></div>
 
-            <ApexDonutChart />
+            <ApexDonutCostChart className="mt-5" />
 
-            <ApexDonutChart />
+            <ApexDonutSavingChart />
 
           </Col>
         </Row>

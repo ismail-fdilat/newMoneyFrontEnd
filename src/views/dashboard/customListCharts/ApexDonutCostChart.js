@@ -1,22 +1,35 @@
 import Chart from 'react-apexcharts'
 import { Card, CardHeader, CardTitle, CardBody, CardSubtitle } from 'reactstrap'
+import { useState, useEffect } from 'react'
+const getData = async () => {
 
+  const requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  }
+  let data = null
+
+  await fetch("http://localhost:9090/api/emporia?scale=1Y&duration=109500", requestOptions)
+    .then(response => response.text()).then(result => { data = result })
+    .catch(error => console.log('error', error))
+  // console.log(data)
+  return data
+}
 const ApexRadiarChart = () => {
+  const [data, setData] = useState([])
   const donutColors = {
-    series1: '#ffe700',
-    series2: '#00d4bd',
-    series3: '#826bf8',
-    series4: '#2b9bf4',
-    series5: '#FFA1A1'
+    series1: '#EB5757',
+    series2: '#FFD6D6',
+    series3: '#8E0000'
   }
   const options = {
     legend: {
       show: true,
       position: 'bottom'
     },
-    labels: ['Operational', 'Networking', 'Hiring', 'R&D'],
+    labels: ['Electricity', 'Retrofit', 'Penalties'],
 
-    colors: [donutColors.series1, donutColors.series5, donutColors.series3, donutColors.series2],
+    colors: [donutColors.series1, donutColors.series2, donutColors.series3],
     dataLabels: {
       enabled: true,
       formatter(val, opt) {
@@ -24,6 +37,7 @@ const ApexRadiarChart = () => {
       }
     },
     plotOptions: {
+
       pie: {
         donut: {
           labels: {
@@ -36,15 +50,15 @@ const ApexRadiarChart = () => {
               fontSize: '1rem',
               fontFamily: 'Montserrat',
               formatter(val) {
-                return `${parseInt(val)}%`
+                return `$${parseInt(val)}`
               }
             },
             total: {
               show: true,
               fontSize: '1.5rem',
-              label: 'Operational',
+              label: 'Costs',
               formatter(w) {
-                return '31%'
+                return `$`
               }
             }
           }
@@ -91,8 +105,13 @@ const ApexRadiarChart = () => {
       }
     ]
   }
+  useEffect(async () => {
+    const data = await getData()
+    console.log(data)
+    data ? setData(JSON.parse(data)) : setData([])
 
-  const series = [85, 16, 50, 50]
+  }, [])
+  const series = [data[0] ? data[0].usage * 0.22 : 0, 1000, data[0] ? ((data[0].usage * 0.000288962) - 5) * 268 : 0]
 
   return (
     <Card style={{
@@ -102,9 +121,8 @@ const ApexRadiarChart = () => {
       <CardHeader>
         <div>
           <CardTitle className='mb-75' tag='h4'>
-            Expense Ratio
+            Costs
           </CardTitle>
-          <CardSubtitle className='text-muted'>Spending on various categories</CardSubtitle>
         </div>
       </CardHeader>
       <CardBody>

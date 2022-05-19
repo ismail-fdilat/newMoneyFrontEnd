@@ -13,7 +13,7 @@ import PageLayoutsRoutes from './PageLayouts'
 const TemplateTitle = ' Admin Template'
 
 // ** Default Route
-const DefaultRoute = '/dashboard/List'
+const DefaultRoute = '/dashboard'
 
 // ** Merge Routes
 const Routes = [
